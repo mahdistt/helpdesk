@@ -35,8 +35,8 @@
                         <td>{{ org.status }}</td>
                         <td>{{ org.is_active }}</td>
                         <td>{{ org.create_info }}</td>
-                        <td><a href="{% url 'ticket:detail-quote' org.pk %}">نمایش</a></td>
-                        {#                        <td><a href="{% url 'ticket:create-ticket' org.pk %}">پرینت</a></td>#}
+                        <td><a href="{% url 'ticket:detail-quote' org.pk %}">Chat</a></td>
+                        <td><a href="{% url 'ticket:edit-quote' org.pk %}">Reference</a></td>
                         {#                        <td><a href="{% url 'ticket:create-ticket' org.pk %}">ایمیل</a></td>#}
                     </tr>
                     </tbody>

@@ -6,11 +6,11 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, UpdateView
 
 # Create your views here.
 from ticket import models
-from ticket.fomrs import CreateQueryForm
+from ticket.fomrs import CreateQueryForm,EditQueryCategoryForm
 
 
 class CreateQuery(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -24,6 +24,16 @@ class CreateQuery(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('dashboard:dashboard')
 
 
+class EditQueryCategoryView(LoginRequiredMixin,UpdateView):
+    """
+        Redirect query category by operators
+    """
+    model = models.Query
+    template_name = 'ticket/edit-query.html'
+    form_class = EditQueryCategoryForm
+    success_url = reverse_lazy('ticket:view-ticket')
+
+
 class DetailQueryReplay(LoginRequiredMixin, DetailView):
     """
         Show a list of Replays for every single query
@@ -31,6 +41,10 @@ class DetailQueryReplay(LoginRequiredMixin, DetailView):
     model = models.Query
     template_name = 'ticket/detail-query.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(DetailQueryReplay, self).get_context_data()
+        context['req'] = self.request
+        return context
 
 
 @login_required

@@ -4,82 +4,38 @@
     Quote: {{ replay.query_related }}
 {% endblock %}
 {% block base_content %}
-    <div class="col p-4">
+    <div class="col p-2">
         <div class="card">
-            <h5 class="card-header font-weight-light" id="label1">The query subject : {{ query.subject }}</h5>
+            <h5 class=" card-header font-weight-light" id="label1">The query subject : {{ query.subject }}</h5>
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">ردیف</th>
-                    <th scope="col">کد کالا</th>
-                    <th scope="col">نام کالا</th>
-                    <th scope="col">قیمت</th>
-                    <th scope="col">تعداد</th>
-                    <th scope="col">درصد تخفیف</th>
-                    <th scope="col">درصد مالیات</th>
+                    <th scope="col">Category: {{ query.query_related }}</th>
+                    <th class="text-right" scope="col">Date: {{ query.create_info }}</th>
                 </tr>
                 </thead>
                 <tbody>
-                <td>{{ query.message }}</td>
-                <td>{{ query.status }}</td>
-                <td>{{ query.is_active }}</td>
-                <td>{{ query.create_info }}</td>
-                <td>{{ query.user_related }}</td>
-                <td>{{ query.query_related }}</td>
+                {% if user.pk == query.user_related.pk %}
+
+                {% else %}
+
+                {% endif %}
+                <td class="text-left alert-info">{{ query.create_info.time }}</td>
+                <td class="text-right alert-info">{{ query.message }}</td>
                 <tr>
                     {% for item in object.replay_set.all %}
-
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ item.replay_message }}</td>
-                        <td>{{ item.create_info }}</td>
-                        <td>{{ item.query_related }}</td>
-                        <td>
-                            {% if item.operator_related %}
-                                {{ item.operator_related }}   % درصد
-                            {% else %}
-                                {{ 'تخفیف نداد' }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if item.product.taxation %}
-                                {{ '9% مالیات' }}
-                            {% else %}
-                                {{ 'مالیات نداد' }}
-                            {% endif %}
-                        </td>
+                        {% if user.pk == item.operator_related.pk %}
+                            <td class="text-left alert-info">{{ item.create_info.time }}</td>
+                            <td class="text-right alert-info">{{ item.replay_message }}</td>
+                        {% else %}
+                            <td class="text-left alert-dark">{{ item.replay_message }}</td>
+                            <td class="text-right alert-dark">{{ item.create_info.time }}</td>
+                        {% endif %}
                         </tr>
                     {% endfor %}
-                <th scope="col">جمع فاکتور</th>
-                <td></td>
-                <td></td>
-                <td>{{ object.get_total_quote_price }}</td>
-                <td>{{ object.get_quantity }}</td>
-
-
-                </tbody>
-            </table>
-            <h5 class="card-header font-weight-light" id="label2">Result: {{ object.creator }}</h5>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">محاسبه</th>
-                    <th scope="col">:قیمت کلی</th>
-                    <th scope="col">:تخیف</th>
-                    <th scope="col">:مالیات</th>
-                    <th scope="col">:قیمت نهایی</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-
-                    <td>قیمت</td>
-                    <td>{{ object.get_total_quote_price }}</td>
-                    <td>-{{ object.get_quote_discount }}</td>
-                    <td>{{ object.get_quote_taxation }}</td>
-                    <td>{{ object.get_final_quote_price }}</td>
-                </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
 {% endblock %}

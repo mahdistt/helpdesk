@@ -1,3 +1,5 @@
+{% extends 'dashboard/base.html' %}
+
 {% load widget_tweaks %}
 <html>
 <head>
@@ -21,9 +23,8 @@
 <div class="signup-form">
     <form method="post">
         <h2>Sign Up</h2>
-        <p>It's free and only takes a minute.</p>
+        <p>Ticketing system | Help desk.</p>
         <hr>
-
         {% csrf_token %}
         <div class="form-group">
             {% render_field form.username class="form-control" placeholder=form.username.label %}
@@ -38,14 +39,11 @@
             {% render_field form.password2 class="form-control" placeholder=form.password2.label %}
         </div>
         <button type="submit" name="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
-        {#        <input type="submit" name="summit">#}
-
     </form>
     <div class="form-group">
     </div>
     <p class="small text-center">By clicking the Sign Up button, you agree to our <br><a href="#">Terms &amp;
         Conditions</a>, and <a href="#">Privacy Policy</a>.</p>
-
     <div class="text-center">Already have an account? <a href="{% url 'user:login-user' %} ">Login here</a></div>
 </div>
 
@@ -107,7 +105,7 @@
     .signup-form .btn, .signup-form .btn:active {
         font-size: 16px;
         font-weight: bold;
-        background: #5fcaba !important;
+        background: #337ab7 !important;
         border: none;
         min-width: 140px;
     }

@@ -17,7 +17,10 @@ class Query(models.Model):
     create_info = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
     slug = models.SlugField(max_length=50, unique=True, editable=False)
     # ForeignKey
-    user_related = models.ForeignKey('user.User', on_delete=models.PROTECT, verbose_name='رابطه با کاربران')
+    user_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='رابطه با کاربران', null=True,
+                                     blank=True)
+    query_related = models.ForeignKey('ticket.Category', on_delete=models.PROTECT, verbose_name='رابطه با کتگوری',null=True,
+                                     blank=True)
 
     def __str__(self):
         """
@@ -40,8 +43,10 @@ class Replay(models.Model):
     """
     replay_message = models.CharField(max_length=500, blank=False, verbose_name='پاسخ تیکت')
     create_info = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
-    query_related = models.ForeignKey('ticket.Query', on_delete=models.CASCADE, verbose_name='کلید جواب برای سوال')
-    operator_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='کلید شخص برای سوال')
+    query_related = models.ForeignKey('ticket.Query', on_delete=models.CASCADE, verbose_name='کلید جواب برای سوال',null=True,
+                                     blank=True)
+    operator_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='کلید شخص برای سوال',null=True,
+                                     blank=True)
 
     def __str__(self):
         """
@@ -56,7 +61,8 @@ class Category(models.Model):
     """
     category_name = models.CharField(max_length=100, blank=False, unique=True, verbose_name='دسته بندی تیکت')
     slug = models.SlugField(max_length=50, unique=True, editable=False)
-    query_related = models.ForeignKey('ticket.Query', on_delete=models.PROTECT, verbose_name='رابطه با پرسش')
+
+    # query_related = models.ForeignKey('ticket.Query', on_delete=models.PROTECT, verbose_name='رابطه با پرسش')
 
     def __str__(self):
         """

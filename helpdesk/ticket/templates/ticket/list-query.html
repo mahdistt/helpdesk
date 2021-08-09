@@ -1,0 +1,57 @@
+{% extends 'dashboard/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block page_header_title %}
+        Quote lis: dwq
+    {% endblock %}
+</head>
+<body>
+{% block base_content %}
+    <div class="col p-4">
+        <div class="card">
+            <h5 class="card-header font-weight-light">All organizations quote </h5>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Row</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Text</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Active?</th>
+                    <th scope="col">date</th>
+                    <th scope="col">print</th>
+                    <th scope="col">detail</th>
+                    <th scope="col">delete</th>
+                </tr>
+                </thead>
+                {% for org in object_list %}
+                    <tbody>
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ org.subject }}</td>
+                        <td>{{ org.message }}</td>
+                        <td>{{ org.status }}</td>
+                        <td>{{ org.is_active }}</td>
+                        <td>{{ org.create_info }}</td>
+                        <td><a href="{% url 'ticket:detail-quote' org.pk %}">نمایش</a></td>
+                        {#                        <td><a href="{% url 'ticket:create-ticket' org.pk %}">پرینت</a></td>#}
+                        {#                        <td><a href="{% url 'ticket:create-ticket' org.pk %}">ایمیل</a></td>#}
+                    </tr>
+                    </tbody>
+                {% endfor %}
+            </table>
+        </div>
+        {% include 'ticket/pagination.html' %}
+    </div>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+</body>
+</html>

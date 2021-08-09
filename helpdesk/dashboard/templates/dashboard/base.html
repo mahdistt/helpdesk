@@ -87,13 +87,13 @@
                    class="list-group-item list-group-item-action bg-dark text-white">
                     <span class="menu-collapsed">Organization Information</span>
                 </a>
-                {#                <a href="{% url 'dashboard:create' %}"#}
-                class="list-group-item list-group-item-action bg-dark text-white">
-                <span class="menu-collapsed">Register Organization</span>
+                <a href="{% url 'ticket:create-ticket' %}"
+                   class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Register Organization</span>
                 </a>
-                {#                <a href="{% url 'quote:list-quote' %}"#}
-                class="list-group-item list-group-item-action bg-dark text-white">
-                <span class="menu-collapsed">Quote Information</span>
+                <a href="{% url 'ticket:view-ticket' %}"
+                   class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Quote Information</span>
                 </a>
                 {#                <a href="{% url 'quote:create-quote' %}"#}
                 class="list-group-item list-group-item-action bg-dark text-white">

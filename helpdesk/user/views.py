@@ -10,7 +10,7 @@ from .forms import UserRegisterForm
 
 class SignUpView(SuccessMessageMixin, CreateView):
     """
-    Register user to website
+    Register user to website financial
     """
     template_name = 'user/create-signup.html'
     success_url = reverse_lazy('dashboard:dashboard')

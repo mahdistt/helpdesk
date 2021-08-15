@@ -1,6 +1,8 @@
 from django.db import models
 # Create your models here.
 from django.utils.text import slugify
+# from simple_history.models import HistoricalRecords
+from simple_history.models import HistoricalRecords
 
 from ticket import enums
 
@@ -19,8 +21,9 @@ class Query(models.Model):
     # ForeignKey
     user_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='رابطه با کاربران', null=True,
                                      blank=True)
-    query_related = models.ForeignKey('ticket.Category', on_delete=models.PROTECT, verbose_name='رابطه با کتگوری',null=True,
-                                     blank=True)
+    category_related = models.ForeignKey('ticket.Category', on_delete=models.PROTECT, verbose_name='رابطه با کتگوری', null=True,
+                                         blank=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         """
@@ -47,6 +50,7 @@ class Replay(models.Model):
                                      blank=True)
     operator_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='کلید شخص برای سوال',null=True,
                                      blank=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         """
@@ -61,6 +65,7 @@ class Category(models.Model):
     """
     category_name = models.CharField(max_length=100, blank=False, unique=True, verbose_name='دسته بندی تیکت')
     slug = models.SlugField(max_length=50, unique=True, editable=False)
+    history = HistoricalRecords()
 
     # query_related = models.ForeignKey('ticket.Query', on_delete=models.PROTECT, verbose_name='رابطه با پرسش')
 

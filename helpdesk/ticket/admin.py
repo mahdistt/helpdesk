@@ -21,7 +21,7 @@ class RelatedProduct(admin.ModelAdmin):
         'status',
         'create_info',
         'user_related',
-        'query_related',
+        'category_related',
     )
     list_display_links = (
         'pk',

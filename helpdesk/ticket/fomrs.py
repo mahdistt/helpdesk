@@ -9,8 +9,8 @@ class CreateQueryForm(forms.ModelForm):
         fields = (
             'subject',
             'message',
-            'user_related',
-            'query_related',
+            # 'user_related',
+            'category_related',
         )
         # widgets = {
         #     'user_related': forms.Select
@@ -23,7 +23,7 @@ class EditQueryCategoryForm(forms.ModelForm):
         fields = (
             'status',
             'user_related',
-            'query_related',
+            'category_related',
             'is_active',
         )
 
@@ -31,4 +31,20 @@ class EditQueryCategoryForm(forms.ModelForm):
         'status': forms.Select,
         'user_related': forms.Select,
         'query_related': forms.Select,
+    }
+
+
+class CreateReplayForm(forms.ModelForm):
+    """
+    create replay with (operator_related and query_related) AJAX
+    """
+
+    class Meta:
+        model = models.Replay
+        fields = ('replay_message',
+                  )
+
+    widgets = {
+        'replay_message': forms.TextInput,
+
     }

@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     {% block page_header_title %}
-       Dashboard: {{ request.user.get_full_name }}
+        Dashboard: {{ request.user.get_full_name }}
     {% endblock %}
 </head>
 <body>
-{% block base_content %}
+{% block content %}
+
     <div class="col p-4">
         <div class="card">
             <h5 class="card-header font-weight-light">all organizations</h5>
@@ -34,14 +35,14 @@
                         <td>{{ org.number }}</td>
                         <td>{{ org.email }}</td>
                         <td>{{ org.number_of_employees }}</td>
-{#                        <td><a href="{% url 'organization:detail' org.pk %}">view detail</a></td>#}
-{#                        <td><a href="{% url 'organization:delete' org.pk %}">delete</a></td>#}
+                        {#                        <td><a href="{% url 'organization:detail' org.pk %}">view detail</a></td>#}
+                        {#                        <td><a href="{% url 'organization:delete' org.pk %}">delete</a></td>#}
                     </tr>
                     </tbody>
                 {% endfor %}
             </table>
         </div>
-{#        {% include 'dashboard/pagination.html' %}#}
+        {#        {% include 'dashboard/pagination.html' %}#}
         {#        <a href="{% url 'phones:print-number' %}" class="btn btn-primary col-md-1">Print</a>#}
     </div>
     {% if messages %}
@@ -52,5 +53,12 @@
         </ul>
     {% endif %}
 {% endblock %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 </body>
 </html>

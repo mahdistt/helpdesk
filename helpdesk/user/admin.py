@@ -1,3 +1,6 @@
-from django.contrib import admin
+from django.contrib.auth.models import User
+from simple_history import register
 
-# Register your models here.
+# from simple_history.tests.tests import User, SimpleHistoryAdmin
+
+register(User)

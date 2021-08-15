@@ -2,6 +2,7 @@
 {% load static %}
 <html>
 <head>
+{% block head %}{% endblock %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="{% static 'base/css/font-awesome.min.css' %}"/>
     <link rel='stylesheet' href="{% static 'base/css/bootstrap.min.css' %}"/>
@@ -168,9 +169,7 @@
 {% block content %}{% endblock %}
 
 {% block base_content %}
-    <li>JQuery</li>
-    <li>Bootstrap 4.3</li>
-    <li>FontAwesome</li>
+
 {% endblock %}
 </div><!-- body-row END -->
 <script>

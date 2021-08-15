@@ -1,5 +1,13 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button id="send-form" class="btn btn-primary " name="submit">save💾</button>
-</form>
+{% extends 'dashboard/base.html' %}
+{% block page_header_title %}
+    Edit: {{ query.create_info }}
+{% endblock %}
+{% block content %}
+    <div class="col-2">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button id="send-form" class="btn btn-primary " name="submit">save💾</button>
+        </form>
+    </div>
+{% endblock %}

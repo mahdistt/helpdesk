@@ -4,13 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic.edit import FormMixin
 
-# Create your views here.
 from ticket import models
-from ticket.fomrs import CreateQueryForm,EditQueryCategoryForm
+from ticket.fomrs import CreateQueryForm, EditQueryCategoryForm, CreateReplayForm
 
 
 class CreateQuery(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -23,8 +24,15 @@ class CreateQuery(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "was register successfully"
     success_url = reverse_lazy('dashboard:dashboard')
 
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.operator_related = self.request.user
+        obj.save()
+        super(CreateQuery, self)
+        return JsonResponse({'massages': 'Created successfully.'}, status=201)
 
-class EditQueryCategoryView(LoginRequiredMixin,UpdateView):
+
+class EditQueryCategoryView(LoginRequiredMixin, UpdateView):
     """
         Redirect query category by operators
     """
@@ -34,17 +42,59 @@ class EditQueryCategoryView(LoginRequiredMixin,UpdateView):
     success_url = reverse_lazy('ticket:view-ticket')
 
 
-class DetailQueryReplay(LoginRequiredMixin, DetailView):
+class DetailQueryReplay(LoginRequiredMixin, FormMixin, DetailView):
     """
-        Show a list of Replays for every single query
-    """
+         Show a list of Replays for every single query
+     """
     model = models.Query
     template_name = 'ticket/detail-query.html'
+    form_class = CreateReplayForm
+    success_message = "done successfully"
+    success_url = reverse_lazy('ticket:view-ticket')
+
+    # def get_queryset(self):
+    #     qs = super().get_queryset()
+    #     s = User.objects.get()
+    #     try:
+    #         return qs.filter(user_related=self.request.user)
+    #     except:
+    #         return qs.filter(user_related=self.request.user)
+
+    # def get_success_url(self):
+    #     return redirect('ticket:detail-quote', pk=self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
-        context = super(DetailQueryReplay, self).get_context_data()
-        context['req'] = self.request
+        context = super(DetailQueryReplay, self).get_context_data(**kwargs)
+        context['form'] = CreateReplayForm(initial={'post': self.object})
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.operator_related = self.request.user
+        obj.query_related = self.object
+        obj.save()
+        return super(DetailQueryReplay, self).form_valid(obj)
+
+    def form_invalid(self, form):
+        JsonResponse({'message': 'form is not valid '})
+
+
+class CreateReplay(LoginRequiredMixin, CreateView):
+    """
+    AJAX: Create Replay to one Query
+    """
+    template_name = 'ticket/detail-query.html'
+    form_class = CreateReplayForm
+    success_url = reverse_lazy('dashboard:dashboard')
+    success_message = "%(operator_related)s Your Query create succcessfully"
 
 
 @login_required
@@ -73,13 +123,3 @@ def show_active_query(request):
                       template_name='ticket/list-query.html')
     else:
         return render(request, 'dashboard/dashboard.html')
-
-# class QuoteCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-#     """
-#         Create quote with some items
-#     """
-#     model = models.QuoteItem
-#     form_class = QuoteCreateViewForm
-#     template_name = 'create-quote.html'
-#     success_message = "%(quote)s was register successfully"
-#     success_url = reverse_lazy('dashboard:dashboard')

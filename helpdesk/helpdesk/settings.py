@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'dashboard',
     'user',
     'ticket',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'helpdesk.urls'
@@ -126,6 +128,6 @@ MEDIA_ROOT = BASE_DIR / 'uploads'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_REDIRECT_URL = ''
 LOGIN_URL = '/user/login/'
-LOGOUT_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL = '/'

@@ -1,4 +1,5 @@
 # Create your views here.
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -30,3 +31,18 @@ class LoginView(SuccessMessageMixin, LoginView):
     success_message = "Welcome %(username)s "
 
 
+class EditProfile(LoginRequiredMixin, UpdateView):
+    """
+    Updates a user profile
+    """
+    model = get_user_model()
+    fields = (
+        'first_name',
+        'last_name',
+        'email',
+    )
+    template_name = 'user/edit-profile.html'
+    success_url = reverse_lazy('dashboard:dashboard')
+
+    def get_object(self, queryset=None):
+        return self.request.user

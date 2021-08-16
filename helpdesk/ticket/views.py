@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from django.views.generic.edit import FormMixin
 
 from ticket import models
@@ -123,3 +123,25 @@ def show_active_query(request):
                       template_name='ticket/list-query.html')
     else:
         return render(request, 'dashboard/dashboard.html')
+
+
+class HistoryListView(LoginRequiredMixin, ListView):
+    """
+    show a list of history  |ordering = ['-id']
+    """
+    model = models.Query
+    template_name = 'ticket/list-history.html'
+
+    extra_context = {'ReplayHistories': models.Query.history,
+                     }
+    paginate_by = 4
+
+    def get_queryset(self):
+        qs = super().get_queryset().order_by('id')
+        if self.request.user.is_authenticated:
+            try:
+                if self.request.user.is_superuser:
+                    return qs
+            # return qs.filter(user_related=self.request.user)
+            except:
+                return qs.EmptyQuerySet

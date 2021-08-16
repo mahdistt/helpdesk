@@ -40,11 +40,11 @@
             <button id="send-form" class="d-inline p-2 bg-primary text-white mr-5 btn btn-primary "
                     name="submit">save💾
             </button>
-            <a href="{% url 'ticket:edit-quote' object.pk %}" id="" class="d-inline p-2 bg-primary text-white btn btn-primary ml-5 bg-warning
+            <a href="{% url 'ticket:edit-query' object.pk %}" id="" class="d-inline p-2 bg-primary text-white btn btn-primary ml-5 bg-warning
                     ">reference</a>
-            <a href="{% url 'ticket:edit-quote' object.pk %}" id="" class="d-inline p-2 bg-primary text-white btn btn-primary bg-info ">print</a>
-            <a href="{% url 'ticket:edit-quote' object.pk %}" id="" class="d-inline p-2 bg-primary text-white btn btn-primary   bg-info">email</a>
-            <a href="{% url 'ticket:edit-quote' object.pk %}" id="" class="d-inline p-2 bg-primary text-dark btn btn-primary bg-danger ">close</a>
+            <a href="{% url 'ticket:edit-query' object.pk %}" id="" class="d-inline p-2 bg-primary text-white btn btn-primary bg-info ">print</a>
+            <a href="{% url 'ticket:edit-query' object.pk %}" id="" class="d-inline p-2 bg-primary text-white btn btn-primary   bg-info">email</a>
+            <a href="{% url 'ticket:edit-query' object.pk %}" id="" class="d-inline p-2 bg-primary text-dark btn btn-primary bg-danger ">close</a>
         </form>
     </div>
 {% endblock %}

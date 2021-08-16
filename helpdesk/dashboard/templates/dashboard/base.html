@@ -2,7 +2,7 @@
 {% load static %}
 <html>
 <head>
-{% block head %}{% endblock %}
+    {% block head %}{% endblock %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="{% static 'base/css/font-awesome.min.css' %}"/>
     <link rel='stylesheet' href="{% static 'base/css/bootstrap.min.css' %}"/>
@@ -22,7 +22,7 @@
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'dashboard:dashboard' %}">
             {% if  user.is_authenticated %}
                 <img src="https://media-exp1.licdn.com/dms/image/C4D03AQG8M7iJeCITgw/profile-displayphoto-shrink_200_200/0/1614260643050?e=1628726400&v=beta&t=GphmyJJNYwbiQ17z4vyRGQj-dwqRljAoD5JrqWSVK8g"
                      width="30" height="30"
@@ -40,11 +40,14 @@
                                 class="sr-only">(current)</span></a>
                     </li>
                 {% endif %}
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#top">Rest-API</a>
+                    </li>
+                {% endif %}
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#top">Rest-API</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#top">Home</a>
+                    <a class="nav-link" href="{% url 'dashboard:dashboard' %}">Home</a>
                 </li>
                 <!-- This menu is hidden in bigger devices with d-sm-none.
                The sidebar isn't proper for smaller screens imo, so this dropdown menu can keep all the useful sidebar itens exclusively for smaller screens  -->
@@ -84,65 +87,57 @@
             </a>
             <!-- Submenu content -->
             <div id='submenu1' class="collapse sidebar-submenu">
-                <a href="{% url 'dashboard:dashboard' %}"
+                <a href="{% url 'ticket:view-ticket' %}"
                    class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="menu-collapsed">Organization Information</span>
+                    <span class="menu-collapsed">List</span>
                 </a>
                 <a href="{% url 'ticket:create-ticket' %}"
                    class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="menu-collapsed">Register Organization</span>
-                </a>
-                <a href="{% url 'ticket:view-ticket' %}"
-                   class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="menu-collapsed">Quote Information</span>
-                </a>
-                {#                <a href="{% url 'quote:create-quote' %}"#}
-                class="list-group-item list-group-item-action bg-dark text-white">
-                <span class="menu-collapsed">Create Quote</span>
+                    <span class="menu-collapsed">Create</span>
                 </a>
             </div>
             <a href="#submenu2" data-toggle="collapse" aria-expanded="false"
                class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="glyphicon glyphicon-alert"></span>
+                    <span class="fa fa-user fa-fw mr-3"></span>
                     <span class="menu-collapsed ">Profile</span>
                     <span class="submenu-icon ml-auto"></span>
                 </div>
             </a>
             <!-- Submenu content -->
             <div id='submenu2' class="collapse sidebar-submenu">
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="menu-collapsed">Settings</span>
+                <a href="{% url 'user:edit-profile' %}"
+                   class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Personal</span>
                 </a>
-                {#                <a href="{% url 'users:edit_profile' %}"#}
-                class="list-group-item list-group-item-action bg-dark text-white">
-                <span class="menu-collapsed">Personal Information</span>
-                </a>
+
             </div>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{% url 'ticket:list-history' %}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-tasks fa-fw mr-3"></span>
                     <span class="menu-collapsed">Tasks</span>
                 </div>
             </a>
-            <!-- Separator with title -->
-            <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
-                <small>OPTIONS</small>
-            </li>
-            <!-- /END Separator -->
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-calendar fa-fw mr-3"></span>
-                    <span class="menu-collapsed">Calendar</span>
-                </div>
-            </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-envelope-o fa-fw mr-3"></span>
-                    <span class="menu-collapsed">Messages <span
-                            class="badge badge-pill badge-primary ml-2">5</span></span>
-                </div>
-            </a>
+            {% if user.is_superuser %}
+                <!-- Separator with title -->
+                <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                    <small>OPTIONS</small>
+                </li>
+                <!-- /END Separator -->
+                <a href="#" class="bg-dark list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <span class="fa fa-calendar fa-fw mr-3"></span>
+                        <span class="menu-collapsed">Calendar</span>
+                    </div>
+                </a>
+                <a href="#" class="bg-dark list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <span class="fa fa-envelope-o fa-fw mr-3"></span>
+                        <span class="menu-collapsed">Messages <span
+                                class="badge badge-pill badge-primary ml-2">5</span></span>
+                    </div>
+                </a>
+            {% endif %}
             <!-- Separator without title -->
             <li class="list-group-item sidebar-separator menu-collapsed"></li>
             <!-- /END Separator -->

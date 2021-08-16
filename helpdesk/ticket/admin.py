@@ -36,6 +36,7 @@ class RelatedProduct(admin.ModelAdmin):
         'operator_related',
 
     )
+
     # list_display_links = (
     #     'pk',
     # )

@@ -1,0 +1,24 @@
+{% extends 'dashboard/base.html' %}
+{% load widget_tweaks %}
+<html>
+<head>
+     {% block page_header_title %}
+       Profile: {{ request.user.get_full_name }}
+    {% endblock %}
+</head>
+
+<body>
+{% block base_content %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="title">نام:</label>
+        {{ form.first_name | add_class:'form-control' }}
+        <label for="title">نام خانوادگی: </label>
+        {{ form.last_name  | add_class:'form-control' }}
+        <label for="title">ایمیل:</label>
+        {{ form.email | add_class:'form-control' }}
+        <input type="submit" name="summit">
+    </form>
+    </body>
+{% endblock %}
+</html>

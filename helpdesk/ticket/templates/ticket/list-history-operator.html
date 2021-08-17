@@ -12,16 +12,15 @@
     {#    --------------------------------------Replay histories-------------------------------#}
         <div class="col p-4">
             <div class="card">
-                <h5 class="card-header font-weight-light">All Replay & Reference histories </h5>
+                <h5 class="card-header font-weight-light">All replay histories: {{ request.user.get_full_name }} </h5>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Row</th>
-                        <th scope="col">Subject</th>
-                        <th scope="col">Text</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Date</th>
+                        <th scope="col">replay_message</th>
+                        <th scope="col">create_info</th>
+                        <th scope="col">query_related</th>
+                        <th scope="col">operator_related</th>
 
                     </tr>
                     </thead>
@@ -29,12 +28,12 @@
                     {% for org in ReplayHistories.all %}
                         <tbody>
                         <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ org.subject }}</td>
-                            <td>{{ org.message }}</td>
-                            <td>{{ org.status }}</td>
-                            <td>{{ org.is_active }}</td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ org.replay_message }}</td>
                             <td>{{ org.create_info }}</td>
+                            <td>{{ org.query_related }}</td>
+                            <td>{{ org.operator_related }}</td>
+                            <td>{{ org.is_active }}</td>
 
                             </a></td>
                         </tr>

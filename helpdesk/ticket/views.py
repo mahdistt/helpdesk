@@ -125,16 +125,15 @@ def show_active_query(request):
         return render(request, 'dashboard/dashboard.html')
 
 
-class HistoryListView(LoginRequiredMixin, ListView):
+class HistoryListViewReplay(LoginRequiredMixin, ListView):
     """
-    show a list of history  |ordering = ['-id']
+    show a list of replay histories and references (for admin)
     """
-    model = models.Query
-    template_name = 'ticket/list-history.html'
-
-    extra_context = {'ReplayHistories': models.Query.history,
+    model = models.Replay
+    template_name = 'ticket/list-history-replay.html'
+    extra_context = {'ReplayHistories': models.Replay.history,
                      }
-    paginate_by = 4
+    paginate_by = 5
 
     def get_queryset(self):
         qs = super().get_queryset().order_by('id')
@@ -143,5 +142,48 @@ class HistoryListView(LoginRequiredMixin, ListView):
                 if self.request.user.is_superuser:
                     return qs
             # return qs.filter(user_related=self.request.user)
+            except:
+                return qs.EmptyQuerySet
+
+
+class HistoryListViewQuery(LoginRequiredMixin, ListView):
+    """
+    show a list of query histories (for admin)
+    """
+    model = models.Query
+    template_name = 'ticket/list-history-query.html'
+    extra_context = {'ReplayHistories': models.Query.history,
+                     }
+    paginate_by = 5
+
+    def get_queryset(self):
+        qs = super().get_queryset().order_by('id')
+        if self.request.user.is_authenticated:
+            try:
+                if self.request.user.is_superuser:
+                    return qs
+            # return qs.filter(user_related=self.request.user)
+            except:
+                return qs.EmptyQuerySet
+
+
+class HistoryListViewOperator(LoginRequiredMixin, ListView):
+    """
+    show a list of replay history that filter by operator (for operator)
+    """
+    model = models.Replay
+    template_name = 'ticket/list-history-operator.html'
+    extra_context = {'ReplayHistories': models.Replay.history,
+                     }
+    paginate_by = 5
+
+    def get_queryset(self):
+        qs = super().get_queryset().order_by('id')
+        if self.request.user.is_authenticated:
+            try:
+                if self.request.user.is_staff:
+                    qs = models.Replay.objects.filter(operator_related=self.request.user)
+                    return qs
+                    # return qs.filter(user_related=self.request.user)
             except:
                 return qs.EmptyQuerySet

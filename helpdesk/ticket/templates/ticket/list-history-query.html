@@ -1,0 +1,64 @@
+{% extends 'dashboard/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block page_header_title %}
+        History
+    {% endblock %}
+</head>
+<body>
+{% block base_content %}
+    {#    --------------------------------------Replay histories-------------------------------#}
+    <div class="col p-4">
+        <div class="card">
+            <h5 class="card-header font-weight-light">All Query & Reference histories {{ request.user.get_full_name }} </h5>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Row</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Referenced</th>
+                    <th scope="col">Text</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Active</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+
+                {% for org in ReplayHistories.all %}
+                    <tbody>
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ org.subject }}</td>
+                        <td>
+                            {% if  org.history_type == '~' %}
+                                Referenced
+                            {% else %}
+                                Create
+                            {% endif %}
+                        </td>
+                        <td>{{ org.message }}</td>
+                        <td>{{ org.status }}</td>
+                        <td>{{ org.is_active }}</td>
+                        <td>{{ org.create_info }}</td>
+                        </a></td>
+                    </tr>
+                    </tr>
+                    </tbody>
+                {% endfor %}
+            </table>
+        </div>
+        {% include 'ticket/pagination.html' %}
+    </div>
+    </div>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+</body>
+</html>

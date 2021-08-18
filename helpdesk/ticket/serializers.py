@@ -5,7 +5,7 @@ from . import models
 
 class QuerySerializer(serializers.ModelSerializer):
     """
-         Serializer class form Organization
+         Serializer class form Query
     """
 
     class Meta:
@@ -24,7 +24,7 @@ class QuerySerializer(serializers.ModelSerializer):
 
 class ReplaySerializer(serializers.ModelSerializer):
     """
-         Serializer class form Organization
+         Serializer class form Replay
     """
 
     class Meta:

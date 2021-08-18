@@ -21,8 +21,10 @@ class Query(models.Model):
     # ForeignKey
     user_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='رابطه با کاربران', null=True,
                                      blank=True)
-    category_related = models.ForeignKey('ticket.Category', on_delete=models.PROTECT, verbose_name='رابطه با کتگوری', null=True,
+    category_related = models.ForeignKey('ticket.Category', on_delete=models.PROTECT, verbose_name='رابطه با کتگوری',
+                                         null=True,
                                          blank=True)
+    operator_related = models.CharField(max_length=20, default=0, verbose_name='ادمین این تیکت')
     history = HistoricalRecords()
 
     def __str__(self):
@@ -46,10 +48,12 @@ class Replay(models.Model):
     """
     replay_message = models.CharField(max_length=500, blank=False, verbose_name='پاسخ تیکت')
     create_info = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
-    query_related = models.ForeignKey('ticket.Query', on_delete=models.CASCADE, verbose_name='کلید جواب برای سوال',null=True,
-                                     blank=True)
-    operator_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='کلید شخص برای سوال',null=True,
-                                     blank=True)
+    query_related = models.ForeignKey('ticket.Query', on_delete=models.CASCADE, verbose_name='کلید جواب برای سوال',
+                                      null=True,
+                                      blank=True)
+    operator_related = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='کلید شخص برای سوال',
+                                         null=True,
+                                         blank=True)
     history = HistoricalRecords()
 
     def __str__(self):

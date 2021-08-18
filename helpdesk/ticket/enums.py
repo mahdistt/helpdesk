@@ -7,6 +7,7 @@ class TicketStatuses(models.TextChoices):
     Statues a ticket can have
     """
     CREATED = 'CREATED', _('Created')
+    RESOLVED = 'RESOLVED', _('Resolved')
     COMPLETED = 'COMPLETED', _('Completed')
     CANCELED = 'CANCELED', _('Canceled')
     SUSPENDED = 'SUSPENDED', _('Suspended')

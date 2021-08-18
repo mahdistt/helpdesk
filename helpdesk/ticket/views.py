@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -48,6 +49,7 @@ class DetailQueryReplay(LoginRequiredMixin, FormMixin, DetailView):
     """
          Show a list of Replays for every single query
      """
+
     model = models.Query
     template_name = 'ticket/detail-query.html'
     form_class = CreateReplayForm
@@ -79,9 +81,12 @@ class DetailQueryReplay(LoginRequiredMixin, FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
+
         obj = form.save(commit=False)
         obj.operator_related = self.request.user
         obj.query_related = self.object
+        models.Query.objects.filter(pk=self.kwargs.get('pk')).update(operator_related=self.request.user.pk)
+        models.Query.objects.filter(pk=self.kwargs.get('pk')).update(status='RESOLVED')
         obj.save()
         return super(DetailQueryReplay, self).form_valid(obj)
 
@@ -102,28 +107,45 @@ class CreateReplay(LoginRequiredMixin, CreateView):
 @login_required
 def show_active_query(request):
     """
-        Show all query that not resolved
+        Show all query that resolved or not
         filter by operators and users
     """
+    qs_list1, qs_list2 = 0, 0
+
     if request.user.is_authenticated:
-        if not request.user.is_superuser:
+        if request.user.is_superuser:
             try:
-                operator_organization = models.Query.objects.filter(operator_info=request.user)
+                # list1: query is resolve (up)
+                qs_list1 = models.Query.objects.filter(~Q(operator_related__exact='0'))
+                # list2: query not resolved (down)
+                qs_list2 = models.Query.objects.filter(operator_related__exact='0')
+            except:
+                return render(request, 'dashboard/dashboard.html')
+        elif request.user.is_staff:
+            try:
+                qs_list1 = models.Query.objects.filter(operator_related=request.user.pk)
+                qs_list2 = models.Query.objects.filter(
+                    Q(operator_related__exact='0') & Q(category_related=request.user.category)
+                )
             except:
                 return render(request, 'dashboard/dashboard.html')
         else:
-            operator_organization = models.Query.objects.all()
-        if operator_organization is None:
-            return render(request, 'dashboard/dashboard.html')
-        other_number = []
-        qs = list(itertools.chain(operator_organization, other_number))
-        paginated = Paginator(qs, 4)
-        paginated_page = paginated.get_page(request.GET.get('page', 1))
-        return render(request=request,
-                      context={'object_list': paginated_page, },
-                      template_name='ticket/list-query.html')
+            try:
+                qs_list1 = models.Query.objects.filter(user_related=request.user)
+            except:
+                return render(request, 'dashboard/dashboard.html')
     else:
         return render(request, 'dashboard/dashboard.html')
+    # --------------------paginator--------------------
+    other_number = []
+    qs = list(itertools.chain(qs_list1, other_number))
+    paginated = Paginator(qs, 4)
+    paginated_page = paginated.get_page(request.GET.get('page', 1))
+    return render(request=request,
+                  context={'object_list': paginated_page,
+                           'qs_list2': qs_list2
+                           },
+                  template_name='ticket/list-query.html')
 
 
 class HistoryListViewReplay(LoginRequiredMixin, ListView):
@@ -189,6 +211,8 @@ class HistoryListViewOperator(LoginRequiredMixin, ListView):
             except:
                 return qs.EmptyQuerySet
 
+
+# --------------------------------------------REST-API-----------------------------------------------------
 
 class QueryInfoAPI(ListAPIView):
     """

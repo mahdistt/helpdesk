@@ -7,73 +7,101 @@
         Dashboard: {{ request.user.get_full_name }}
     {% endblock %}
 </head>
-<body>
 {% block content %}
-
+    <body>
     <div class="col p-4">
-    <div class="card">
-    <h5 class="card-header font-weight-light text-center">Welcome: {{ request.user.get_full_name }}</h5>
-    <div class="alert alert-dismissable alert-warning">
-        <ul>
-            <li style="text-align: justify;"><strong>Ticketing Management</strong>: Help Desk Software enables the user
-                to assign, prioritise and categorise tickets so that the user can keep track of them and consequently
-                respond to them. The user can track, monitor and manage incoming customer support tickets from different
-                channels in a single location. Help Desk Software enables the user to set ticket response and problem
-                resolution deadlines depending on various categories and business hours. Help Desk Software ensures that
-                multiple support agents don’t work on the same ticket accidentally and helps create custom statuses that
-                suit the user workflow to identify what stage a particular ticket is in.
-            </li>
-            <li style="text-align: justify;"><strong>Collaboration</strong>: Enables the user to collaborate to quickly
-                and efficiently address and resolve customer concerns. The user can link related tickets together to
-                track common issues and deliver consistent responses. The user can discuss specific parts of tickets
-                with experts from across the company to figure out how to address the customer concern and offer the
-                right solutions. The user can share ticket ownership with other teams and view the progress being made
-                on the issues.
-            </li>
-            <li style="text-align: justify;"><strong>Multichannel Support</strong>: The user can convert support emails
-                into trackable tickets in the helpdesk so that they can manage and resolve them accordingly. Help Desk
-                Software enables the user to set up a fully functional call centre that record and monitors call by
-                converting them into tickets. The user can support, engage and retain customers through live chat. Help
-                Desk Software can help integrate business social median handles to manage their concerns from within the
-                helpdesk. Help Desk Software allows customers to raise tickets from the website and display related
-                knowledge-base articles or answers to them as they type.
-            </li>
-            <li style="text-align: justify;"><strong>Automation</strong>: Automation feature enables the user to perform
-                multiple actions on a ticket with a single click by automating repeated actions. The user can offer
-                quick and consistent replies to common questions by creating pre-set responses. The user can
-                automatically assign tickets to agents and groups depending on various aspects as keywords, enquirer or
-                properties. Help Desk Software enables the user to assign tickets to agents depending on their current
-                workload and skills among other aspects. Help Desk Software updates customers and agents automatically
-                about the progress of their ticket.
-            </li>
-            <li style="text-align: justify;"><strong>Self-Service portal</strong>: Allow the user to create a
-                self-service experience for customers and lets appropriate solutions to come up for customers and agents
-                as they troubleshoot and try to resolve issues. Help Desk Software enables agents to convert their
-                ticket responses into knowledge base articles as they reply to customers queries.
-            </li>
-            <li style="text-align: justify;"><strong>Reporting</strong>: The user can check how different agents and
-                groups are performing depending on various helpdesk metrics. Help Desk Software allows the user to gauge
-                customers’ satisfaction using customer satisfaction reports. The user can monitor the helpdesk
-                Dashboards using real-time data about tickets, groups and trends. Users access data and reports to
-                gather custom insights to help in the business decision-making process. The user can get a default and
-                custom reports in their inbox periodically.
-            </li>
-        </ul>
+        <div class="card">
+            <h5 class="card-header font-weight-light text-center">Dashboard: {{ request.user.get_full_name }}
+                {% if messages %}
+                    <div class="messages alert alert-primary" role="alert">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                {% endif %}
+                </div>
+            </h5>
+
+            <div class="alert alert-dismissable alert-warning">
+                <ul>
+                    <li style="text-align: justify;"><strong>Ticketing Management</strong>: Help Desk Software enables
+                        the user
+                        to assign, prioritise and categorise tickets so that the user can keep track of them and
+                        consequently
+                        respond to them. The user can track, monitor and manage incoming customer support tickets from
+                        different
+                        channels in a single location. Help Desk Software enables the user to set ticket response and
+                        problem
+                        resolution deadlines depending on various categories and business hours. Help Desk Software
+                        ensures that
+                        multiple support agents don’t work on the same ticket accidentally and helps create custom
+                        statuses that
+                        suit the user workflow to identify what stage a particular ticket is in.
+                    </li>
+                    <li style="text-align: justify;"><strong>Collaboration</strong>: Enables the user to collaborate to
+                        quickly
+                        and efficiently address and resolve customer concerns. The user can link related tickets
+                        together to
+                        track common issues and deliver consistent responses. The user can discuss specific parts of
+                        tickets
+                        with experts from across the company to figure out how to address the customer concern and offer
+                        the
+                        right solutions. The user can share ticket ownership with other teams and view the progress
+                        being made
+                        on the issues.
+                    </li>
+                    <li style="text-align: justify;"><strong>Multichannel Support</strong>: The user can convert support
+                        emails
+                        into trackable tickets in the helpdesk so that they can manage and resolve them accordingly.
+                        Help Desk
+                        Software enables the user to set up a fully functional call centre that record and monitors call
+                        by
+                        converting them into tickets. The user can support, engage and retain customers through live
+                        chat. Help
+                        Desk Software can help integrate business social median handles to manage their concerns from
+                        within the
+                        helpdesk. Help Desk Software allows customers to raise tickets from the website and display
+                        related
+                        knowledge-base articles or answers to them as they type.
+                    </li>
+                    <li style="text-align: justify;"><strong>Automation</strong>: Automation feature enables the user to
+                        perform
+                        multiple actions on a ticket with a single click by automating repeated actions. The user can
+                        offer
+                        quick and consistent replies to common questions by creating pre-set responses. The user can
+                        automatically assign tickets to agents and groups depending on various aspects as keywords,
+                        enquirer or
+                        properties. Help Desk Software enables the user to assign tickets to agents depending on their
+                        current
+                        workload and skills among other aspects. Help Desk Software updates customers and agents
+                        automatically
+                        about the progress of their ticket.
+                    </li>
+                    <li style="text-align: justify;"><strong>Self-Service portal</strong>: Allow the user to create a
+                        self-service experience for customers and lets appropriate solutions to come up for customers
+                        and agents
+                        as they troubleshoot and try to resolve issues. Help Desk Software enables agents to convert
+                        their
+                        ticket responses into knowledge base articles as they reply to customers queries.
+                    </li>
+                    <li style="text-align: justify;"><strong>Reporting</strong>: The user can check how different agents
+                        and
+                        groups are performing depending on various helpdesk metrics. Help Desk Software allows the user
+                        to gauge
+                        customers’ satisfaction using customer satisfaction reports. The user can monitor the helpdesk
+                        Dashboards using real-time data about tickets, groups and trends. Users access data and reports
+                        to
+                        gather custom insights to help in the business decision-making process. The user can get a
+                        default and
+                        custom reports in their inbox periodically.
+                    </li>
+                </ul>
+            </div>
+
+        </div>
     </div>
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    </div>
+    </body>
 {% endblock %}
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-</body>
 </html>
+
+

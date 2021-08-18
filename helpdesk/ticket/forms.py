@@ -9,12 +9,8 @@ class CreateQueryForm(forms.ModelForm):
         fields = (
             'subject',
             'message',
-            # 'user_related',
             'category_related',
         )
-        # widgets = {
-        #     'user_related': forms.Select
-        # }
 
 
 class EditQueryCategoryForm(forms.ModelForm):
@@ -26,6 +22,9 @@ class EditQueryCategoryForm(forms.ModelForm):
             'category_related',
             'is_active',
         )
+        widgets = {
+            'is_active': forms.CheckboxInput,
+        }
 
     widgets = {
         'status': forms.Select,

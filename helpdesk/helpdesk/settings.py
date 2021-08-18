@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'user',
     'ticket',
     'simple_history',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

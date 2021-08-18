@@ -9,9 +9,11 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from django.views.generic.edit import FormMixin
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.generics import ListAPIView
 
-from ticket import models
-from ticket.fomrs import CreateQueryForm, EditQueryCategoryForm, CreateReplayForm
+from ticket import models, serializers
+from ticket.forms import CreateQueryForm, EditQueryCategoryForm, CreateReplayForm
 
 
 class CreateQuery(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -21,15 +23,14 @@ class CreateQuery(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Query
     form_class = CreateQueryForm
     template_name = 'ticket/create_ticket.html'
-    success_message = "was register successfully"
-    success_url = reverse_lazy('dashboard:dashboard')
+    success_message = "Your message has been successfully registered"
+    success_url = reverse_lazy('ticket:view-ticket')
 
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.operator_related = self.request.user
         obj.save()
-        super(CreateQuery, self)
-        return JsonResponse({'massages': 'Created successfully.'}, status=201)
+        return super(CreateQuery, self).form_valid(form)
 
 
 class EditQueryCategoryView(LoginRequiredMixin, UpdateView):
@@ -39,6 +40,7 @@ class EditQueryCategoryView(LoginRequiredMixin, UpdateView):
     model = models.Query
     template_name = 'ticket/edit-query.html'
     form_class = EditQueryCategoryForm
+    success_message = "Reference has been successfully"
     success_url = reverse_lazy('ticket:view-ticket')
 
 
@@ -93,8 +95,8 @@ class CreateReplay(LoginRequiredMixin, CreateView):
     """
     template_name = 'ticket/detail-query.html'
     form_class = CreateReplayForm
+    success_message = "%(operator_related)s Your Query create successfully"
     success_url = reverse_lazy('dashboard:dashboard')
-    success_message = "%(operator_related)s Your Query create succcessfully"
 
 
 @login_required
@@ -103,7 +105,6 @@ def show_active_query(request):
         Show all query that not resolved
         filter by operators and users
     """
-
     if request.user.is_authenticated:
         if not request.user.is_superuser:
             try:
@@ -116,7 +117,7 @@ def show_active_query(request):
             return render(request, 'dashboard/dashboard.html')
         other_number = []
         qs = list(itertools.chain(operator_organization, other_number))
-        paginated = Paginator(qs, 2)
+        paginated = Paginator(qs, 4)
         paginated_page = paginated.get_page(request.GET.get('page', 1))
         return render(request=request,
                       context={'object_list': paginated_page, },
@@ -187,3 +188,36 @@ class HistoryListViewOperator(LoginRequiredMixin, ListView):
                     # return qs.filter(user_related=self.request.user)
             except:
                 return qs.EmptyQuerySet
+
+
+class QueryInfoAPI(ListAPIView):
+    """
+    API  all Query related with operator
+    """
+
+    serializer_class = serializers.QuerySerializer
+    queryset = models.Query.objects.all()
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_superuser:
+            return qs
+        if self.request.user.is_anonymous:
+            raise NotAuthenticated('You need to be logged on.')
+        return qs.filter(user_related=self.request.user)
+
+
+class ReplayInfoAPI(ListAPIView):
+    """
+    API  all Replay related with operator
+    """
+    serializer_class = serializers.ReplaySerializer
+    queryset = models.Replay.objects.all()
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_superuser:
+            return qs
+        if self.request.user.is_anonymous:
+            raise NotAuthenticated('You need to be logged on.')
+        return qs.filter(operator_related=self.request.user)

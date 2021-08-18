@@ -42,7 +42,7 @@
                 {% endif %}
                 {% if user.is_superuser %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#top">Rest-API</a>
+                        <a class="nav-link" href="{% url 'query-api' %}">Rest-API</a>
                     </li>
                 {% endif %}
 
@@ -88,11 +88,11 @@
             <!-- Submenu content -->
             <div id='submenu1' class="collapse sidebar-submenu">
                 <a href="{% url 'ticket:view-ticket' %}"
-                   class="list-group-item fa fa-list mr-3 list-group-item-action bg-dark text-white">
+                   class="list-group-item  list-group-item-action bg-dark text-white">
                     <span class="menu-collapsed ">List</span>
                 </a>
                 <a href="{% url 'ticket:create-ticket' %}"
-                   class="list-group-item fa fa-comment mr-3 list-group-item-action bg-dark text-white">
+                   class="list-group-item  mr-3 list-group-item-action bg-dark text-white">
                     <span class="menu-collapsed">Create</span>
                 </a>
             </div>
@@ -113,7 +113,8 @@
 
             </div>
             {% if user.is_staff %}
-                <a href="{% url 'ticket:list-history-operator' %}" class="bg-dark list-group-item list-group-item-action">
+                <a href="{% url 'ticket:list-history-operator' %}"
+                   class="bg-dark list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-start align-items-center">
                         <span class="fa fa-tasks fa-fw mr-3"></span>
                         <span class="menu-collapsed">History</span>
@@ -135,7 +136,7 @@
                     <div class="d-flex w-100 justify-content-start align-items-center">
                         <span class="fa fa-bar-chart fa-fw mr-3"></span>
                         <span class="menu-collapsed">Query </span>
-{#                                class="badge badge-pill badge-primary ml-2">5</span></span>#}
+                        {#                                class="badge badge-pill badge-primary ml-2">5</span></span>#}
                     </div>
                 </a>
             {% endif %}

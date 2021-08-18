@@ -1,24 +1,32 @@
 {% extends 'dashboard/base.html' %}
 {% load widget_tweaks %}
-<html>
-<head>
-     {% block page_header_title %}
-       Profile: {{ request.user.get_full_name }}
-    {% endblock %}
-</head>
 
-<body>
+    {% block page_header_title %}
+        Profile: {{ request.user.get_full_name }}
+    {% endblock %}
+
 {% block base_content %}
-    <form method="post">
-        {% csrf_token %}
-        <label for="title">نام:</label>
-        {{ form.first_name | add_class:'form-control' }}
-        <label for="title">نام خانوادگی: </label>
-        {{ form.last_name  | add_class:'form-control' }}
-        <label for="title">ایمیل:</label>
-        {{ form.email | add_class:'form-control' }}
-        <input type="submit" name="summit">
-    </form>
-    </body>
+    <div class="col p-4">
+        <div class="card">
+            <h5 class="card-header font-weight-light text-center">Dashboard: {{ request.user.get_full_name }}
+                {% if messages %}
+                    <div class="messages alert alert-primary" role="alert">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                {% endif %}
+                </div>
+            </h5>
+            <form method="post">
+                {% csrf_token %}
+                <label for="title">نام:</label>
+                {{ form.first_name | add_class:'form-control' }}
+                <label for="title">نام خانوادگی: </label>
+                {{ form.last_name  | add_class:'form-control' }}
+                <label for="title">ایمیل:</label>
+                {{ form.email | add_class:'form-control' }}
+                <input type="submit" name="summit">
+            </form>
+        </div>
+    </div>
 {% endblock %}
-</html>

@@ -16,9 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from ticket.views import QueryInfoAPI, ReplayInfoAPI
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('user.urls')),
     path('ticket/', include('ticket.urls')),
     path('', include('dashboard.urls')),
+    path('api/', include('rest_framework.urls')),
+    path('api/v1/query', QueryInfoAPI.as_view(), name='query-api'),
+    path('api/v1/replay', ReplayInfoAPI.as_view(), name='replay-api'),
 ]

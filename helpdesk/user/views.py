@@ -43,6 +43,7 @@ class EditProfile(LoginRequiredMixin, UpdateView):
     )
     template_name = 'user/edit-profile.html'
     success_url = reverse_lazy('dashboard:dashboard')
+    success_message = " %(username)s your profile changed successfully"
 
     def get_object(self, queryset=None):
         return self.request.user

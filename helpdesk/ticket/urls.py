@@ -11,4 +11,5 @@ urlpatterns = [
     path('history/replay', views.HistoryListViewReplay.as_view(), name='list-history-replay'),
     path('history/operator', views.HistoryListViewOperator.as_view(), name='list-history-operator'),
     path('history/query', views.HistoryListViewQuery.as_view(), name='list-history-query'),
+    path('close/<int:id>', views.set_cancel_status_query, name='close-query'),
 ]

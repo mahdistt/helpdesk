@@ -8,13 +8,13 @@
 {% block base_content %}
     <div class="col p-4">
         <div class="card">
-            <h5 class="card-header font-weight-light text-center">Dashboard: {{ request.user.get_full_name }}
+            <h5 class="card-header font-weight-light text-center">Profile: {{ request.user.get_full_name }}
                 {% if messages %}
                     <div class="messages alert alert-primary" role="alert">
                     {% for message in messages %}
                         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                     {% endfor %}
-                {% endif %}
+                {% endif %}v
                 </div>
             </h5>
             <form method="post">

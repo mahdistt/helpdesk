@@ -41,6 +41,14 @@ class Query(models.Model):
             self.slug = slugify(self.subject, allow_unicode=True)
         super().save(*args, **kwargs)
 
+    def close_query(self):
+        if self.is_active:
+            self.is_active = False
+            self.status=enums.TicketStatuses.CANCELED
+            return True
+        else:
+            return False
+
 
 class Replay(models.Model):
     """

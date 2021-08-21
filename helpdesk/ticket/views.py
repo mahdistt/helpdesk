@@ -1,12 +1,13 @@
 import itertools
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from django.views.generic.edit import FormMixin
@@ -56,16 +57,6 @@ class DetailQueryReplay(LoginRequiredMixin, FormMixin, DetailView):
     success_message = "done successfully"
     success_url = reverse_lazy('ticket:view-ticket')
 
-    # def get_queryset(self):
-    #     qs = super().get_queryset()
-    #     s = User.objects.get()
-    #     try:
-    #         return qs.filter(user_related=self.request.user)
-    #     except:
-    #         return qs.filter(user_related=self.request.user)
-
-    # def get_success_url(self):
-    #     return redirect('ticket:detail-quote', pk=self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
         context = super(DetailQueryReplay, self).get_context_data(**kwargs)
@@ -123,7 +114,9 @@ def show_active_query(request):
                 return render(request, 'dashboard/dashboard.html')
         elif request.user.is_staff:
             try:
-                qs_list1 = models.Query.objects.filter(operator_related=request.user.pk)
+                qs_list1 = models.Query.objects.filter(
+                    Q(operator_related=request.user.pk) & Q(is_active=1)
+                )
                 qs_list2 = models.Query.objects.filter(
                     Q(operator_related__exact='0') & Q(category_related=request.user.category)
                 )
@@ -131,8 +124,14 @@ def show_active_query(request):
                 return render(request, 'dashboard/dashboard.html')
         else:
             try:
-                qs_list1 = models.Query.objects.filter(user_related=request.user)
+                qs_list1 = models.Query.objects.filter(
+                    Q(user_related=request.user) & Q(is_active=1)
+                )
+                qs_list2 = models.Query.objects.filter(
+                    Q(user_related=request.user) & Q(is_active=0)
+                )
             except:
+
                 return render(request, 'dashboard/dashboard.html')
     else:
         return render(request, 'dashboard/dashboard.html')
@@ -210,6 +209,21 @@ class HistoryListViewOperator(LoginRequiredMixin, ListView):
                     # return qs.filter(user_related=self.request.user)
             except:
                 return qs.EmptyQuerySet
+
+
+def set_cancel_status_query(request, id):
+    """
+    :param id: it's the object id
+    :return:  set False for is_active field else return expire time
+    """
+    product_instance = get_object_or_404(models.Query, pk=id)
+    if product_instance.close_query():
+        product_instance.save()
+        messages.success(request, "The ticket was closed")
+        return redirect('ticket:view-ticket')
+    else:
+        messages.error(request, 'the query time is expired')
+        return redirect('ticket:view-ticket')
 
 
 # --------------------------------------------REST-API-----------------------------------------------------

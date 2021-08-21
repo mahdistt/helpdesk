@@ -10,8 +10,15 @@
     <div class="container">
         <div class="row">
             <div class="col p-2">
-                <h5 class="card-header font-weight-light text-left">Query resolved by: {{ request.user.get_full_name }}
-                    {% if messages %}
+                <h5 class="card-header font-weight-light text-left">
+                {% if   request.user.is_superuser %}
+                    All query that resolved:
+                {% elif request.user.is_staff %}
+                      Query resolved by: {{ request.user.get_full_name }}
+                {% else %}
+                    Your active queries:  {{ request.user.get_full_name }}
+                {% endif %}
+                     {% if messages %}
                         <div class="messages alert alert-primary" role="alert">
                         {% for message in messages %}
                             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -27,7 +34,7 @@
                     <th scope="col">Subject</th>
                     <th scope="col">Text</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Category</th>
+                    <th scope="col">Is_active</th>
                     <th scope="col">Date</th>
                     <th scope="col">History</th>
                     <th scope="col">Reference</th>
@@ -41,7 +48,6 @@
                         <td>{{ org.subject }}</td>
                         <td>{{ org.message }}</td>
                         <td>{{ org.status }}</td>
-                        <td>{{ org.user_related }}</td>
                         <td>{{ org.is_active }}</td>
                         <td>{{ org.create_info }}</td>
                         <td><a href="{% url 'ticket:detail-query' org.pk %}">Chat</a></td>
@@ -52,7 +58,15 @@
                 {% endfor %}
             </table>
             {% include 'ticket/pagination.html' %}
-            <h5 class="card-header font-weight-light text-left">Your Query Category: {{ request.user.category }}</h5>
+            <h5 class="card-header font-weight-light text-left">
+                    {% if   request.user.is_superuser %}
+                    All query in queue:
+                {% elif request.user.is_staff %}
+                      Query resolved by: {{ request.user.get_full_name }}
+                {% else %}
+                    Your expired queries:  {{ request.user.get_full_name }}
+                {% endif %}
+            </h5>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -60,7 +74,7 @@
                     <th scope="col">Subject</th>
                     <th scope="col">Text</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Category</th>
+                    <th scope="col">Is_active</th>
                     <th scope="col">Date</th>
                     <th scope="col">History</th>
                     <th scope="col">Reference</th>

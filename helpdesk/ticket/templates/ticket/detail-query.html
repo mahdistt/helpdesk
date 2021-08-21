@@ -7,7 +7,8 @@
     <div class="container">
         <div class="row">
             <div class="col p-2">
-                <h5 class="card-header font-weight-light text-center">The query subject : {{ query.subject }}
+                <h5 class="card-header font-weight-light text-left">The query subject : {{ query.subject }}
+
                     {% if messages %}
                         <div class="messages alert alert-primary" role="alert">
                         {% for message in messages %}
@@ -17,53 +18,56 @@
                     </div>
                 </h5>
             </div>
-                <div class="row">
-                    <div class="col p-2">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col">Category: {{ query.category_related }}</th>
-                                <th class="text-right" scope="col">Date: {{ query.create_info }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if user.pk == query.user_related.pk %}
-                            {% else %}
-                            {% endif %}
-                            <td class="text-left alert-info">{{ query.create_info.time }}</td>
-                            <td class="text-right alert-info">{{ query.message }}</td>
-                            <tr>
-                                {% for item in object.replay_set.all %}
-                                    {% if user.pk == item.operator_related.pk %}
-                                        <td class="text-left alert-info">{{ item.create_info.time }}</td>
-                                        <td class="text-right alert-info">{{ item.replay_message }}</td>
-                                    {% else %}
-                                        <td class="text-left alert-dark">{{ item.replay_message }}</td>
-                                        <td class="text-right alert-dark">{{ item.create_info.time }}</td>
-                                    {% endif %}
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            <div class="row">
+                <div class="col p-2">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Category: {{ query.category_related }}</th>
+                            <th class="text-right" scope="col">Date: {{ query.create_info }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if user.pk == query.user_related.pk %}
+                        {% else %}
+                        {% endif %}
+                        <td class="text-left alert-info">{{ query.create_info.time }}</td>
+                        <td class="text-right alert-info">{{ query.message }}</td>
+                        <tr>
+                            {% for item in object.replay_set.all %}
+                                {% if user.pk == item.operator_related.pk %}
+                                    <td class="text-left alert-info">{{ item.create_info.time }}</td>
+                                    <td class="text-right alert-info">{{ item.replay_message }}</td>
+                                {% else %}
+                                    <td class="text-left alert-dark">{{ item.replay_message }}</td>
+                                    <td class="text-right alert-dark">{{ item.create_info.time }}</td>
+                                {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-                        <form method="post">
-                            {% csrf_token %}<br>
-                            {{ form.replay_message|add_class:'form-control form-text  ' }}<br>
-                            <button id="send-form" class="d-inline p-2 bg-primary text-white mr-5 btn btn-primary "
-                                    name="submit">save💾
-                            </button>
+                    <form method="post">
+                        {% csrf_token %}<br>
+                        {{ form.replay_message|add_class:'form-control form-text' }}<br>
+                        <button id="send-form" class="d-inline p-2 bg-primary text-white mr-5 btn btn-primary "
+                                name="submit">save
+                        </button>
+                        {% if user.is_staff %}
                             <a href="{% url 'ticket:edit-query' object.pk %}" id="" class="d-inline p-2 bg-primary text-white btn btn-primary ml-5 bg-warning
-                    ">reference</a>
+                                 ">reference</a>
                             <a href="{% url 'ticket:edit-query' object.pk %}" id=""
                                class="d-inline p-2 bg-primary text-white btn btn-primary bg-info ">print</a>
+
                             <a href="{% url 'ticket:edit-query' object.pk %}" id=""
                                class="d-inline p-2 bg-primary text-white btn btn-primary   bg-info">email</a>
-                            <a href="{% url 'ticket:edit-query' object.pk %}" id=""
+                            <a href="{% url 'ticket:close-query' object.pk %}" id=""
                                class="d-inline p-2 bg-primary text-dark btn btn-primary bg-danger ">close</a>
-                        </form>
-                    </div>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
 {% endblock %}

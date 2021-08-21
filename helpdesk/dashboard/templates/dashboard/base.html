@@ -24,9 +24,9 @@
         </button>
         <a class="navbar-brand" href="{% url 'dashboard:dashboard' %}">
             {% if  user.is_authenticated %}
-                <img src="https://media-exp1.licdn.com/dms/image/C4D03AQG8M7iJeCITgw/profile-displayphoto-shrink_200_200/0/1614260643050?e=1628726400&v=beta&t=GphmyJJNYwbiQ17z4vyRGQj-dwqRljAoD5JrqWSVK8g"
-                     width="30" height="30"
-                     class="d-inline-block align-top" alt="user_profile_image_personal">
+{#                <img src="https://media-exp1.licdn.com/dms/image/C4D03AQG8M7iJeCITgw/profile-displayphoto-shrink_200_200/0/1614260643050?e=1628726400&v=beta&t=GphmyJJNYwbiQ17z4vyRGQj-dwqRljAoD5JrqWSVK8g"#}
+{#                     width="30" height="30"#}
+                     <h4 class="fa fa-user fa-fw "></h4>
             {% endif %}
             {% if user.is_authenticated %}
                 <span class="menu-collapsed"> {{ request.user.get_full_name }}</span>
@@ -99,7 +99,7 @@
             <a href="#submenu2" data-toggle="collapse" aria-expanded="false"
                class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-user fa-fw mr-3"></span>
+                    <span class="fa fa-edit fa-fw mr-3"></span>
                     <span class="menu-collapsed ">Profile</span>
                     <span class="submenu-icon ml-auto"></span>
                 </div>
